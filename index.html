@@ -1,0 +1,26 @@
+<html>
+	<head>
+		<meta charset="utf-8"/>
+		<script src="wasm_exec.js"></script>
+		<script>
+            window.runWASMInstance = function(runner, instance) { runner.run(instance) }
+
+            if (!WebAssembly.instantiateStreaming) { // Polyfill when Browser doesnt support WebAssembly.instantiateStreaming
+                console.log("WebAssembly.instantiateStreaming not available, reestructuring...");
+			    WebAssembly.instantiateStreaming = async (resp, importObject) => {
+				    const source = await (await resp).arrayBuffer();
+				    return await WebAssembly.instantiate(source, importObject);
+			    };
+		    }
+            const goRunner = new Go();
+            let goInstance;
+			WebAssembly.instantiateStreaming(fetch("lib.wasm"), goRunner.importObject).then((result) => {
+                goInstance = result.instance
+            });
+
+		</script>
+	</head>
+	<body>
+        <button onclick="runWASMInstance(goRunner, goInstance)">Run WebAssembly!!</button>
+    </body>
+</html>

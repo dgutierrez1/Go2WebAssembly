@@ -1,0 +1,11 @@
+{
+  "name": "go-2-web-assembly",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "build:wasm": "GOARCH=wasm GOOS=js go build -o lib.wasm main.go",
+    "serve": "go run server.go"
+  },
+  "author": "Daniel Gutierrez",
+  "license": "ISC"
+}
